@@ -70,8 +70,8 @@ export const adaptOpenGraphImages = async (
             url: '',
           };
         }
-        //eslisnt-disable
-        let _image;
+/* eslint-disable */        
+let _image;
 
         if (
           typeof resolvedImage === 'string' &&
