@@ -70,32 +70,32 @@ export const adaptOpenGraphImages = async (
             url: '',
           };
         }
+        //eslisnt-disable
+        let _image;
 
-        
         if (
           typeof resolvedImage === 'string' &&
           (resolvedImage.startsWith('http://') || resolvedImage.startsWith('https://')) &&
           isUnpicCompatible(resolvedImage)
         ) {
-          // const_image = (await unpicOptimizer(resolvedImage, [defaultWidth], defaultWidth, defaultHeight, 'jpg'))[0];
+          _image = (await unpicOptimizer(resolvedImage, [defaultWidth], defaultWidth, defaultHeight, 'jpg'))[0];
         } else if (resolvedImage) {
           const dimensions =
             typeof resolvedImage !== 'string' && resolvedImage?.width <= defaultWidth
               ? [resolvedImage?.width, resolvedImage?.height]
               : [defaultWidth, defaultHeight];
-          // _image = (
-          //   await astroAsseetsOptimizer(resolvedImage, [dimensions[0]], dimensions[0], dimensions[1], 'jpg')
-          // )
-          [0];
+          _image = (
+            await astroAsseetsOptimizer(resolvedImage, [dimensions[0]], dimensions[0], dimensions[1], 'jpg')
+          )[0];
         }
 
-        // if (typeof _image === 'object') {
-        //   return {
-        //     // url: 'src' in _image && typeof _image.src === 'string' ? String(new URL(_image.src, astroSite)) : '',
-        //     // width: 'width' in _image && typeof _image.width === 'number' ? _image.width : undefined,
-        //     // height: 'height' in _image && typeof _image.height === 'number' ? _image.height : undefined,
-        //   };
-        // }
+        if (typeof _image === 'object') {
+          return {
+            url: 'src' in _image && typeof _image.src === 'string' ? String(new URL(_image.src, astroSite)) : '',
+            width: 'width' in _image && typeof _image.width === 'number' ? _image.width : undefined,
+            height: 'height' in _image && typeof _image.height === 'number' ? _image.height : undefined,
+          };
+        }
         return {
           url: '',
         };
@@ -107,7 +107,5 @@ export const adaptOpenGraphImages = async (
     })
   );
 
-  return { 
-    // ...openGraph, ...(adaptedImages ? { images: adaptedImages } : {}) 
-  };
+  return { ...openGraph, ...(adaptedImages ? { images: adaptedImages } : {}) };
 };
